@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  cv-system:
+    build: .
+    container_name: ultimate-cv-system
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+      - XAUTHORITY=/tmp/.docker.xauth
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ./screenshots:/app/screenshots
+      - /dev/video0:/dev/video0  # For camera access on Linux
+    devices:
+      - /dev/video0:/dev/video0  # Alternative device mapping
+    network_mode: host  # Required for X11 forwarding on Linux
+    privileged: true  # May be needed for camera access
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
